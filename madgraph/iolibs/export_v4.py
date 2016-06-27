@@ -6267,8 +6267,9 @@ def ExportV4Factory(cmd, noclean, output_type='default', group_subprocesses=True
     # An installation is required then, but only if the specified path is the
     # default local one and that the Ninja library appears missing.
     if requires_ninja and (not opt['ninja'] is None) and\
-            os.path.abspath(opt['ninja'])==pjoin(MG5DIR,'HEPTools','lib') and\
-            not os.path.isfile(pjoin(MG5DIR,'HEPTools','lib','libninja.a')):
+            not os.path.isfile(pjoin(os.path.abspath(opt['ninja']),'libninja.a')):
+            #os.path.abspath(opt['ninja'])==pjoin(MG5DIR,'HEPTools','lib') and\
+            #not os.path.isfile(pjoin(MG5DIR,'HEPTools','lib','libninja.a')):
                 # Then install Ninja here from the tarballs in the vendor
                 # directory so that it would work offline too.
                 logger.info(
