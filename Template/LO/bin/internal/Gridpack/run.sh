@@ -78,43 +78,5 @@ else
     cd ..
 fi
 
-if [[ -e ./DECAY/decay ]]; then
-    cd DECAY
-    echo -$seed > iseed.dat
-    for ((i = 1 ;  i <= 20;  i++)) ; do
-	if [[ -e decay_$i\.in ]]; then
-	    echo "Decaying events..."
-	    mv ../events.lhe ../events_in.lhe
-	    ./decay < decay_$i\.in
-	fi
-    done
-    cd ..
-fi
-
-if [[ -e ./REPLACE/replace.pl ]]; then
-    for ((i = 1 ;  i <= 20;  i++)) ; do
-	if [[ -e ./REPLACE/replace_card$i\.dat ]];then
-	    echo "Adding flavors..."
-	    mv ./events.lhe ./events_in.lhe
-	    cd ./REPLACE
-	    ./replace.pl ../events_in.lhe ../events.lhe < replace_card$i\.dat
-	    cd ..
-	fi
-    done
-fi
-
-# part added by Stephen Mrenna to correct the kinematics of the replaced
-#  particles
-if [[ -e ./madevent/bin/internal/addmasses.py ]]; then
-  mv ./events.lhe ./events.lhe.0
-  python ./madevent/bin/internal/addmasses.py ./events.lhe.0 ./events.lhe
-  if [[ $? -eq 0 ]]; then
-     echo "Mass added"
-     rm -rf ./events.lhe.0 &> /dev/null
-  else
-     mv ./events.lhe.0 ./events.lhe
-  fi
-fi  
-
 gzip -f events.lhe
 exit
